@@ -6,7 +6,15 @@ defmodule HandlerTest do
   test "send a GET request to /wildthings and receive a response with status 200" do
     request = build_request(%{ method: "GET", path: "/wildthings" })
 
-    expected_response = build_response(%{status: 200, body: "Bears, Lions, Tigers"})
+    expected_response = build_response(%{status: 200, body: emojify("Bears, Lions, Tigers")})
+
+    assert Handler.handle(request) == expected_response
+  end
+
+  test "send a GET request to /wildlife and redirect to /wildthings and receive a response with status 200" do
+    request = build_request(%{ method: "GET", path: "/wildlife" })
+
+    expected_response = build_response(%{status: 200, body: emojify("Bears, Lions, Tigers")})
 
     assert Handler.handle(request) == expected_response
   end
@@ -14,7 +22,7 @@ defmodule HandlerTest do
   test "send a GET request to /bears and receive a response with status 200" do
     request = build_request(%{method: "GET", path: "/bears"})
 
-    expected_response = build_response(%{status: 200, body: "Teddy, Smokey, Paddington"})
+    expected_response = build_response(%{status: 200, body: emojify("Teddy, Smokey, Paddington")})
 
     assert Handler.handle(request) == expected_response
   end
@@ -22,7 +30,15 @@ defmodule HandlerTest do
   test "send a GET request to /bears/1 and receive a response with status 200" do
     request = build_request(%{method: "GET", path: "/bears/1"})
 
-    expected_response = build_response(%{status: 200, body: "Bear 1"})
+    expected_response = build_response(%{status: 200, body: emojify("Bear 1")})
+
+    assert Handler.handle(request) == expected_response
+  end
+
+  test "send a GET request to /bears?id=1 and receive a response with status 200" do
+    request = build_request(%{method: "GET", path: "/bears?id=1"})
+
+    expected_response = build_response(%{status: 200, body: emojify("Bear 1")})
 
     assert Handler.handle(request) == expected_response
   end
@@ -61,6 +77,11 @@ defmodule HandlerTest do
 
     #{data.body}
     """
+  end
+
+  def emojify(body) do
+    emojies = String.duplicate("🎉", 5)
+    emojies <> "\n" <> body <> "\n" <> emojies
   end
 
   defp status_reason(code) do

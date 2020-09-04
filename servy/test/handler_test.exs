@@ -4,7 +4,7 @@ defmodule HandlerTest do
   alias Servy.Handler
 
   test "send a GET request to /wildthings and receive a response with status 200" do
-    request = build_request(%{ method: "GET", path: "/wildthings" })
+    request = build_request(%{method: "GET", path: "/wildthings"})
 
     expected_response = build_response(%{status: 200, body: emojify("Bears, Lions, Tigers")})
 
@@ -12,7 +12,7 @@ defmodule HandlerTest do
   end
 
   test "send a GET request to /wildlife and redirect to /wildthings and receive a response with status 200" do
-    request = build_request(%{ method: "GET", path: "/wildlife" })
+    request = build_request(%{method: "GET", path: "/wildlife"})
 
     expected_response = build_response(%{status: 200, body: emojify("Bears, Lions, Tigers")})
 
@@ -75,6 +75,26 @@ defmodule HandlerTest do
     assert Handler.handle(request) == expected_response
   end
 
+  test "send a POST request to /bears and receive a response with status 201" do
+    request = build_request(%{method: "POST", path: "/bears", params: "name=Baloo&type=Brown"})
+
+    expected_response = build_response(%{status: 201, body: "Created a Brown, bear named Baloo!"})
+
+    assert Handler.handle(request) == expected_response
+  end
+
+  defp build_request(%{method: "POST"} = data) do
+    """
+    #{data.method} #{data.path} HTTP/1.1
+    Host: example.com
+    User-Agent: ExampleBrowser/1.0
+    Accept: */*
+    Content-Type: application/x-www-form-urlencoded
+    Content-Length: #{String.length(data.params)}
+
+    #{data.params}
+    """
+  end
   defp build_request(data) do
     """
     #{data.method} #{data.path} HTTP/1.1

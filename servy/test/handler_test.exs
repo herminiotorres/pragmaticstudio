@@ -59,6 +59,22 @@ defmodule HandlerTest do
     assert Handler.handle(request) == expected_response
   end
 
+  test "send a GET request to /bears/new and receive a response with form page" do
+    request = build_request(%{method: "GET", path: "/bears/new"})
+
+    expected_response = build_response(handle_file(%{status: 200, body: "", file: "form"}))
+
+    assert Handler.handle(request) == expected_response
+  end
+
+  test "send a GET request to /pages/about and receive a response with about page" do
+    request = build_request(%{method: "GET", path: "/pages/about"})
+
+    expected_response = build_response(handle_file(%{status: 200, body: "", file: "about"}))
+
+    assert Handler.handle(request) == expected_response
+  end
+
   defp build_request(data) do
     """
     #{data.method} #{data.path} HTTP/1.1
@@ -79,7 +95,24 @@ defmodule HandlerTest do
     """
   end
 
-  def emojify(body) do
+  def handle_file(conv) do
+    Path.expand("../pages", __DIR__)
+    |> Path.join(conv.file <> ".html")
+    |> File.read
+    |> handle_file(conv)
+  end
+
+  defp handle_file({:ok, content}, conv) do
+    %{conv | status: 200, body: emojify(content)}
+  end
+  defp handle_file({:error, :enoent}, conv) do
+    %{conv | status: 404, body: "File not found!"}
+  end
+  defp handle_file({:error, reason}, conv) do
+    %{conv | status: 500, body: "File error: #{reason}"}
+  end
+
+  defp emojify(body) do
     emojies = String.duplicate("🎉", 5)
     emojies <> "\n" <> body <> "\n" <> emojies
   end

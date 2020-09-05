@@ -22,7 +22,9 @@ defmodule HandlerTest do
   test "send a GET request to /bears and receive a response with status 200" do
     request = build_request(%{method: "GET", path: "/bears"})
 
-    expected_response = build_response(%{status: 200, body: emojify("<ul><li>Brutus - Grizzly</li><li>Kenai - Grizzly</li><li>Scarface - Grizzly</li></ul>")})
+    content = "<h1>All The Bears!</h1>\n<ul>\n  \n    <li>Brutus - Grizzly</li>\n  \n    <li>Iceman - Polar</li>\n  \n    <li>Kenai - Grizzly</li>\n  \n    <li>Paddington - Brown</li>\n  \n    <li>Roscoe - Panda</li>\n  \n    <li>Rosie - Black</li>\n  \n    <li>Scarface - Grizzly</li>\n  \n    <li>Smokey - Black</li>\n  \n    <li>Snow - Polar</li>\n  \n    <li>Teddy - Brown</li>\n  \n</ul>\n"
+
+    expected_response = build_response(%{status: 200, body: emojify(content)})
 
     assert Handler.handle(request) == expected_response
   end
@@ -30,15 +32,19 @@ defmodule HandlerTest do
   test "send a GET request to /bears/1 and receive a response with status 200" do
     request = build_request(%{method: "GET", path: "/bears/1"})
 
-    expected_response = build_response(%{status: 200, body: emojify("<h1>Bear 1: Teddy</h1>")})
+    content = "<h1>Show Bear</h1>\n<p>\n  Is Teddy hibernating? <strong>true</strong>\n</p>\n"
 
+    expected_response = build_response(%{status: 200, body: emojify(content)})
+    
     assert Handler.handle(request) == expected_response
   end
 
   test "send a GET request to /bears?id=1 and receive a response with status 200" do
     request = build_request(%{method: "GET", path: "/bears?id=1"})
 
-    expected_response = build_response(%{status: 200, body: emojify("<h1>Bear 1: Teddy</h1>")})
+    content = "<h1>Show Bear</h1>\n<p>\n  Is Teddy hibernating? <strong>true</strong>\n</p>\n"
+
+    expected_response = build_response(%{status: 200, body: emojify(content)})
 
     assert Handler.handle(request) == expected_response
   end

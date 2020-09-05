@@ -17,6 +17,16 @@ defmodule RefugeWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+
+    # get "/bears", BearController, :index
+    # get "/bears/new", BearController, :new
+    # get "/bears/:id", BearController, :show
+    # get "/bears/:id/edit", BearController, :edit
+    # post "/bears", BearController, :create
+    # put "/bears/:id", BearController, :update
+    # patch "/bears/:id", BearController, :update
+    # delete "/bears/:id", BearController, :delete
+    resources "/bears", BearController
   end
 
   # Other scopes may use custom stacks.

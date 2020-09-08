@@ -13,7 +13,7 @@ defmodule Servy.Conv do
   defp status_reason(code) do
     %{
       200 => "OK",
-      201 => "Create",
+      201 => "Created",
       401 => "Unauthorized",
       403 => "Forbidden",
       404 => "Not Found",

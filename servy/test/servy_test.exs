@@ -1,7 +1,7 @@
 defmodule ServyTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
-  test "its true" do
-    assert true
+  test "the truth" do
+    assert Servy.hello() == :world
   end
 end

@@ -65,19 +65,22 @@ defmodule Servy.Handler do
   end
 
   def emojify(%Conv{status: 200} = conv) do
-    emojies = String.duplicate("🎉", 5)
-    body = emojies <> "\n" <> conv.resp_body <> "\n" <> emojies
-
-    %{conv | resp_body: body}
+    if Mix.env != :test do
+      emojies = String.duplicate("🎉", 5)
+      body = emojies <> "\n" <> conv.resp_body <> "\n" <> emojies
+      %{conv | resp_body: body}
+    else
+      conv
+    end
   end
   def emojify(%Conv{} = conv), do: conv
 
   def format_response(%Conv{} = conv) do
     """
-    HTTP/1.1 #{Conv.full_status(conv)}
-    Content-Type: text/html
-    Content-Length: #{String.length(conv.resp_body)}
-
+    HTTP/1.1 #{Conv.full_status(conv)}\r
+    Content-Type: text/html\r
+    Content-Length: #{String.length(conv.resp_body)}\r
+    \r
     #{conv.resp_body}
     """
   end

@@ -2,8 +2,7 @@ defmodule Servy.Handler do
   @moduledoc """
     Handles HTTP requests.
   """
-  alias Servy.Conv
-  alias Servy.BearController
+  alias Servy.{BearController, Conv, VideoCam}
 
   import Servy.Plugins, only: [rewrite_path: 1, log: 1, track: 1]
   import Servy.Parser, only: [parse: 1]
@@ -24,6 +23,22 @@ defmodule Servy.Handler do
     |> track
     |> put_content_length
     |> format_response
+  end
+
+  def route(%Conv{method: "GET", path: "/snapshot"} = conv) do
+    parent = self() # the request-handling process
+
+    spawn(fn -> send(parent, {:result, VideoCam.get_snapshot("cam-1")}) end)
+    spawn(fn -> send(parent, {:result, VideoCam.get_snapshot("cam-2")}) end)
+    spawn(fn -> send(parent, {:result, VideoCam.get_snapshot("cam-3")}) end)
+
+    snapshot1 = receive do {:result, filename} -> filename end
+    snapshot2 = receive do {:result, filename} -> filename end
+    snapshot3 = receive do {:result, filename} -> filename end
+
+    snapshots = [snapshot1, snapshot2, snapshot3]
+
+    %{conv | status: 200, resp_body: inspect(snapshots)}
   end
 
   def route(%Conv{method: "GET", path: "/kaboom"} = _conv) do

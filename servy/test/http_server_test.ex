@@ -1,10 +1,9 @@
 defmodule HttpServerTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
-  alias Servy.HttpServer
-  alias Servy.HttpClient
+  alias Servy.{HttpClient, HttpServer}
 
-  test "accepts a request on a socket and sends back a response" do
+  test "accepts a request on a socket and sends back a response via HTTP" do
     spawn(HttpServer, :start, [4000])
 
     request = """
@@ -24,5 +23,42 @@ defmodule HttpServerTest do
     \r
     Bears, Lions, Tigers
     """
+  end
+
+  test "accepts one request on a socket and sends back a response via JSON" do
+    spawn(HttpServer, :start, [4000])
+
+    {:ok, response} = HTTPoison.get("http://localhost:4000/wildthings")
+
+    assert response.status_code == 200
+    assert response.body == "Bears, Lions, Tigers"
+  end
+
+  test "accepts concurrency requests on a socket and sends back a response via JSON" do
+    spawn(HttpServer, :start, [4000])
+
+    parent = self()
+
+    max_concurrent_request = 5
+
+    # Spawn the client processes
+    for _ <- 1..max_concurrent_request do
+      spawn(fn ->
+        # Send the request
+        {:ok, response} = HTTPoison.get("http://localhost:4000/wildthings")
+
+        # Send the response back to the parent
+        send(parent, {:ok, response})
+      end)
+    end
+
+    # Await all {:handled, response} messages from spawned processes.
+    for _ <- 1..max_concurrent_request do
+      receive do
+        {:ok, response} ->
+          assert response.status_code == 200
+          assert response.body == "Bears, Lions, Tigers"
+      end
+    end
   end
 end

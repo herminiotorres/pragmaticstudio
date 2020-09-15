@@ -2,7 +2,7 @@ defmodule Servy.Handler do
   @moduledoc """
     Handles HTTP requests.
   """
-  alias Servy.{BearController, Conv, FourOhFourCounter, PledgeController, VideoCam, Tracker}
+  alias Servy.{BearController, Conv, FourOhFourCounter, PledgeController, SensorServer}
 
   import Servy.FileHandler, only: [handle_file: 2]
   import Servy.Parser, only: [parse: 1]
@@ -22,7 +22,7 @@ defmodule Servy.Handler do
     |> rewrite_path
     |> log
     |> route
-    # |> emojify
+    |> emojify
     |> track
     |> put_content_length
     |> format_response
@@ -35,7 +35,6 @@ defmodule Servy.Handler do
   end
 
   def route(%Conv{method: "POST", path: "/pledges"} = conv) do
-    Logger.warn("POST |> pledges |> conv.params => #{inspect(conv.params)}")
     PledgeController.create(conv, conv.params)
   end
 
@@ -48,16 +47,9 @@ defmodule Servy.Handler do
   end
 
   def route(%Conv{method: "GET", path: "/sensors"} = conv) do
-    task = Task.async(Tracker, :get_location, ["bigfoot"])
+    sensor_data = SensorServer.get_sensor_data()
 
-    snapshots =
-      ["cam-1", "cam-2", "cam-3"]
-      |> Enum.map(&Task.async(fn -> VideoCam.get_snapshot(&1) end))
-      |> Enum.map(&Task.await/1)
-
-    where_is_bigfoot = Task.await(task)
-
-    render(conv, "sensors.eex", snapshots: snapshots, location: where_is_bigfoot)
+    render(conv, "sensors.eex", sensor_data)
   end
 
   def route(%Conv{method: "GET", path: "/kaboom"} = _conv) do
@@ -130,7 +122,7 @@ defmodule Servy.Handler do
   end
   def markdown_to_html(%Conv{} = conv), do: conv
 
-  def emojify(%Conv{status: 200} = conv) do
+  def emojify(%Conv{status: status} = conv) when status > 1000 do
     if Mix.env != :test do
       emojies = String.duplicate("🎉", 5)
       body = emojies <> "\n" <> conv.resp_body <> "\n" <> emojies

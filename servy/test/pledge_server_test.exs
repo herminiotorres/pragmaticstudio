@@ -4,7 +4,9 @@ defmodule PledgeServerTest do
   alias Servy.PledgeServer
 
   test "caches the 3 most recent pledges and totals their amounts" do
-    PledgeServer.start()
+    {:ok, pid} = PledgeServer.start()
+
+    send pid, {:stop, "hammertime"}
 
     PledgeServer.create_pledge("larry", 10)
     PledgeServer.create_pledge("moe", 20)
@@ -17,5 +19,9 @@ defmodule PledgeServerTest do
     assert PledgeServer.recent_pledges() == most_recent_pledges
 
     assert PledgeServer.total_pledged() == 120
+
+    assert Process.info(pid, :messages) == {:messages, []}
+
+    Process.exit(pid, :kill)
   end
 end

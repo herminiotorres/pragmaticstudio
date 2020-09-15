@@ -4,7 +4,7 @@ defmodule HttpServerTest do
   alias Servy.{HttpClient, HttpServer}
 
   test "accepts a request on a socket and sends back a response via HTTP" do
-    spawn(HttpServer, :start, [4000])
+    pid = spawn(HttpServer, :start, [4000])
 
     request = """
     GET /wildthings HTTP/1.1\r
@@ -23,30 +23,12 @@ defmodule HttpServerTest do
     \r
     Bears, Lions, Tigers
     """
-  end
-
-  test "accepts one request on a socket and sends back a response via JSON" do
-    spawn(HttpServer, :start, [4000])
-
-    url = "http://localhost:4000/wildthings"
-
-    HTTPoison.get(url)
-    |> assert_successful_response
-  end
-
-  test "accepts concurrency requests on a socket and sends back a response via JSON" do
-    spawn(HttpServer, :start, [4000])
-
-    url = "http://localhost:4000/wildthings"
-
-    1..5
-    |> Enum.map(fn _ -> Task.async(fn -> HTTPoison.get(url) end) end)
-    |> Enum.map(&Task.await/1)
-    |> Enum.map(&assert_successful_response/1)
+    
+    Process.exit(pid, :kill)
   end
 
   test "accepts a request on a socket and sends back a response" do
-    spawn(HttpServer, :start, [4000])
+    pid = spawn(HttpServer, :start, [4000])
 
     urls = [
       "http://localhost:4000/wildthings",
@@ -60,6 +42,15 @@ defmodule HttpServerTest do
     |> Enum.map(&Task.async(fn -> HTTPoison.get(&1) end))
     |> Enum.map(&Task.await/1)
     |> Enum.map(&assert_successful_response/1)
+
+    url = "http://localhost:4000/wildthings"
+
+    1..5
+    |> Enum.map(fn _ -> Task.async(fn -> HTTPoison.get(url) end) end)
+    |> Enum.map(&Task.await/1)
+    |> Enum.map(&assert_successful_response/1)
+
+    Process.exit(pid, :kill)
   end
 
   defp assert_successful_response({:ok, response}) do

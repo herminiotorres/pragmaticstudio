@@ -1,47 +1,51 @@
 defmodule Servy.FourOhFourCounter do
   @name :four_oh_four_counter
 
-  alias Servy.GenericServer
+  use GenServer
 
   # Client Interface
 
   def start do
     IO.puts("Starting the 404 counter ...")
-    GenericServer.start(__MODULE__, %{}, @name)
+    GenServer.start(__MODULE__, %{}, name: @name)
   end
 
   def bump_count(path) do
-    GenericServer.call(@name, {:bump_count, path})
+    GenServer.call(@name, {:bump_count, path})
   end
 
   def get_counts do
-    GenericServer.call(@name, :get_counts)
+    GenServer.call(@name, :get_counts)
   end
 
   def get_count(path) do
-    GenericServer.call(@name, {:get_count, path})
+    GenServer.call(@name, {:get_count, path})
   end
 
   def reset do
-    GenericServer.cast(@name, :reset)
+    GenServer.cast(@name, :reset)
   end
 
   # Server Callbacks
+  def init(state) do
+    {:ok, state}
+  end
+
   def handle_call({:bump_count, path}, state) do
     new_state = Map.update(state, path, 1, &(&1 + 1))
-    {:ok, new_state}
+    {:reply, :ok, new_state}
   end
 
   def handle_call(:get_counts, state) do
-    {state, state}
+    {:reply, state, state}
   end
 
   def handle_call({:get_count, path}, state) do
     count = Map.get(state, path, 0)
-    {count, state}
+    {:reply, count, state}
   end
 
   def handle_cast(:reset, _state) do
-    %{}
+    {:noreply, %{}}
   end
 end

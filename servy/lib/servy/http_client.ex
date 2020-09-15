@@ -1,10 +1,10 @@
 defmodule Servy.HttpClient do
-  @host 'localhost'
-  @port 4001
-
   def send_request(request) do
-    options = [:binary, packet: :raw, active: false]
-    {:ok, socket} = :gen_tcp.connect(@host, @port, options)
+    host = 'localhost'
+    port = 4000
+
+    {:ok, socket} =
+      :gen_tcp.connect(host, port, [:binary, packet: :raw, active: false])
 
     :ok = :gen_tcp.send(socket, request)
     {:ok, response} = :gen_tcp.recv(socket, 0)

@@ -1,8 +1,12 @@
 defmodule Servy.Parser do
   alias Servy.Conv
 
+  require Logger
+
   def parse(request) do
-    [top, params_string] = String.split(request, "\r\n\r\n")
+    splited_request = String.split(request, "\r\n\r\n")
+    top = hd(splited_request)
+    params_string = tl(splited_request)
 
     [request_line | header_lines] = String.split(top, "\r\n")
 
@@ -43,8 +47,11 @@ defmodule Servy.Parser do
         %{"name" => "Breezly", "type" => "Polar"}
 
   """
-  def parse_params("application/x-www-form-urlencoded", params_string) do
+  def parse_params("application/x-www-form-urlencoded", params_string) when is_binary(params_string) do
     params_string |> String.trim |> URI.decode_query
+  end
+  def parse_params("application/x-www-form-urlencoded", params_string) when is_list(params_string) do
+    parse_params("application/x-www-form-urlencoded", params_string |> List.first)
   end
   def parse_params("application/json", params_string) do
     Poison.Parser.parse!(params_string, %{})

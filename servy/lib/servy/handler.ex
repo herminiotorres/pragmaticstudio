@@ -2,7 +2,7 @@ defmodule Servy.Handler do
   @moduledoc """
     Handles HTTP requests.
   """
-  alias Servy.{BearController, Conv, VideoCam, Tracker}
+  alias Servy.{BearController, Conv, FourOhFourCounter, PledgeController, VideoCam, Tracker}
 
   import Servy.FileHandler, only: [handle_file: 2]
   import Servy.Parser, only: [parse: 1]
@@ -10,6 +10,8 @@ defmodule Servy.Handler do
   import Servy.View, only: [render: 3]
 
   @pages_path Path.expand("../../pages", __DIR__)
+
+  require Logger
 
   @doc """
     Transforms the request into a response.
@@ -20,10 +22,29 @@ defmodule Servy.Handler do
     |> rewrite_path
     |> log
     |> route
-    |> emojify
+    # |> emojify
     |> track
     |> put_content_length
     |> format_response
+  end
+
+  def route(%Conv{method: "GET", path: "/404s"} = conv) do
+    counts = FourOhFourCounter.get_counts
+
+    %{conv | status: 200, resp_body: inspect(counts)}
+  end
+
+  def route(%Conv{method: "POST", path: "/pledges"} = conv) do
+    Logger.warn("POST |> pledges |> conv.params => #{inspect(conv.params)}")
+    PledgeController.create(conv, conv.params)
+  end
+
+  def route(%Conv{method: "GET", path: "/pledges/new"} = conv) do
+    PledgeController.new(conv)
+  end
+
+  def route(%Conv{method: "GET", path: "/pledges"} = conv) do
+    PledgeController.index(conv)
   end
 
   def route(%Conv{method: "GET", path: "/sensors"} = conv) do

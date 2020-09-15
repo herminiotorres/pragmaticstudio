@@ -4,9 +4,9 @@ defmodule ParserTest do
   alias Servy.Parser
 
   test "parses a list of header fields into a map" do
-    header_lines = ["A: 1", "B: 2"]
+    headers_lines = ["A: 1", "B: 2"]
 
-    headers = Parser.parse_headers(headers_lines, %{})
+    headers = Parser.parse_headers(headers_lines)
 
     assert headers == %{"A" => "1", "B" => "2"}
   end

@@ -1,5 +1,5 @@
 defmodule Servy.Plugins do
-  alias Servy.Conv
+  alias Servy.{Conv, FourOhFourCounter}
 
   require Logger
 
@@ -7,7 +7,10 @@ defmodule Servy.Plugins do
     Logs 404 requests.
   """
   def track(%Conv{status: 404, path: path} = conv) do
-    if Mix.env != :test, do: Logger.warn("Warning: #{path} is on the loose!")
+    if Mix.env != :test do
+      Logger.warn("Warning: #{path} is on the loose!")
+      FourOhFourCounter.bump_count(path)
+    end
     conv
   end
   def track(%Conv{} = conv), do: conv

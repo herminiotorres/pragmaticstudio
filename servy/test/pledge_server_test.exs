@@ -4,9 +4,11 @@ defmodule PledgeServerTest do
   alias Servy.PledgeServer
 
   test "caches the 3 most recent pledges and totals their amounts" do
-    {:ok, pid} = PledgeServer.start()
+    PledgeServer.start_link([])
 
-    send pid, {:stop, "hammertime"}
+    pid = GenServer.whereis(:pledge_server)
+
+    send(pid, {:stop, "hammertime"})
 
     PledgeServer.create_pledge("larry", 10)
     PledgeServer.create_pledge("moe", 20)

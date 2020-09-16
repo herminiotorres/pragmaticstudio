@@ -9,16 +9,29 @@ defmodule Servy.ServicesSupervisor do
         Supervisor.init(children, strategy: :one_for_one)
 
     Here's a quick summary of all the restart strategies:
-      - :one_for_one means if a child process terminates, only that process is restarted. None of the other child processes being supervised are affected.
+      - :one_for_one means if a child process terminates, only that process is restarted.
+      None of the other child processes being supervised are affected.
 
-      - :one_for_all means if any child process terminates, the supervisor will terminate all the other children. All the child processes are then restarted. You'll typically use this strategy if all the child processes depend on each other and should therefore have their fates tied together.
+      - :one_for_all means if any child process terminates, the supervisor will terminate all
+      the other children. All the child processes are then restarted.
+      You'll typically use this strategy if all the child processes depend on each other and
+      should therefore have their fates tied together.
 
-      - :rest_for_one means if a child process terminates, the rest of the child processes that were started after it (those children listed after the terminated child) are terminated as well. The terminated child process and the rest of the child processes are then restarted.
+      - :rest_for_one means if a child process terminates,
+      the rest of the child processes that were started after it
+      (those children listed after the terminated child) are terminated as well.
+      The terminated child process and the rest of the child processes are then restarted.
 
-      - :simple_one_for_one is intended for situations where you need to dynamically attach children. This strategy is restricted to cases when the supervisor only has one child specification. Using this specification as a recipe, the supervisor can dynamically spawn multiple child processes that are then attached to the supervisor. You would use this strategy if you needed to create a pool of similar worker processes, for example.
+      - :simple_one_for_one is intended for situations where you need to dynamically attach children.
+      This strategy is restricted to cases when the supervisor only has one child specification.
+      Using this specification as a recipe, the supervisor can dynamically spawn multiple child
+      processes that are then attached to the supervisor. You would use this strategy
+      if you needed to create a pool of similar worker processes, for example.
 
     In addition to the strategy option, you can also initialize a supervisor with the following other options:
-      - :max_restarts indicates the maximum number of restarts allowed within a specific time frame. After this threshold is met, the supervisor gives up. This is used to prevent infinite restarts. The default is 3 restarts.
+      - :max_restarts indicates the maximum number of restarts allowed within a specific time frame.
+      After this threshold is met, the supervisor gives up. This is used to prevent infinite restarts.
+      The default is 3 restarts.
 
       - :max_seconds indicates the time frame in which :max_restarts applies. The default is 5 seconds.
 
@@ -40,7 +53,7 @@ defmodule Servy.ServicesSupervisor do
   def init(:ok) do
     children = [
       Servy.PledgeServer,
-      {Servy.SensorServer, 60},
+      {Servy.SensorServer, :timer.minutes(60)},
       Servy.FourOhFourCounter
     ]
 

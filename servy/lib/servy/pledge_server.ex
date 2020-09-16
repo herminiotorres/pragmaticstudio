@@ -12,7 +12,8 @@ defmodule Servy.PledgeServer do
 
     Here's a quick break-down of the fields in the child specification and what they control:
       - :id
-        A name used internally by the supervisor to uniquely identify the child specification. This key is always required.
+        A name used internally by the supervisor to uniquely identify the child specification.
+        This key is always required.
         Default: __MODULE__
 
       - :start
@@ -23,14 +24,20 @@ defmodule Servy.PledgeServer do
         An atom that defines when a terminated child process should be restarted by its supervisor:
         :permanent indicates that the child process is always restarted
         :temporary indicates that the child process is never restarted
-        :transient indicates that the child process is restarted only if it terminates abnormally. That is, the exit signal reason must be something other than :normal, :shutdown, or {:shutdown, term}.
+        :transient indicates that the child process is restarted only if it terminates abnormally.
+        That is, the exit signal reason must be something other than :normal, :shutdown, or {:shutdown, term}.
         Default: :permanent
 
       - :shutdown
         An atom that defines how a child process should be terminated by its supervisor:
-        :brutal_kill indicates that the child process is brutally terminated using Process.exit(child_pid, :kill)
+        :brutal_kill indicates that the child process is brutally terminated using
+        Process.exit(child_pid, :kill)
         :infinity indicates that the supervisor should wait indefinitely for the child process to terminate
-        any integer indicates the amount of time in milliseconds that the supervisor will wait for a child process to terminate gracefully after sending it a polite Process.exit(child, :shutdown) signal. If no exit signal is received from the child process within the specified time, the child process is brutally terminated using Process.exit(child_pid, :kill). So the supervisor asks nicely once, then it drops the hammer.
+        any integer indicates the amount of time in milliseconds that the supervisor will wait for
+        a child process to terminate gracefully after sending it a polite
+        Process.exit(child, :shutdown) signal. If no exit signal is received from the child process
+        within the specified time, the child process is brutally terminated using
+        Process.exit(child_pid, :kill). So the supervisor asks nicely once, then it drops the hammer.
         Default: 5000 if the type is :worker or :infinity if the type is :supervisor.
 
       - :type
@@ -49,11 +56,6 @@ defmodule Servy.PledgeServer do
   """
 
   # Client Interface
-
-  def start do
-    IO.puts("Starting the pledge server...")
-    GenServer.start(__MODULE__, %State{}, name: @name)
-  end
 
   def start_link(_args) do
     IO.puts("Starting the pledge server...")
@@ -138,22 +140,22 @@ defmodule Servy.PledgeServer do
   end
 end
 
-alias Servy.PledgeServer
-
-{:ok, pid} = PledgeServer.start()
-
-send pid, {:stop, "hammertime"}
-
-PledgeServer.set_cache_size(4)
-
-IO.inspect PledgeServer.create_pledge("larry", 10)
-
-PledgeServer.clear()
-
-IO.inspect PledgeServer.create_pledge("moe", 20)
-IO.inspect PledgeServer.create_pledge("curly", 30)
-IO.inspect PledgeServer.create_pledge("daisy", 40)
-IO.inspect PledgeServer.create_pledge("grace", 50)
-
-IO.inspect PledgeServer.recent_pledges()
-IO.inspect PledgeServer.total_pledged()
+# alias Servy.PledgeServer
+#
+# {:ok, pid} = PledgeServer.start_link([])
+#
+# send pid, {:stop, "hammertime"}
+#
+# PledgeServer.set_cache_size(4)
+#
+# IO.inspect PledgeServer.create_pledge("larry", 10)
+#
+# PledgeServer.clear()
+#
+# IO.inspect PledgeServer.create_pledge("moe", 20)
+# IO.inspect PledgeServer.create_pledge("curly", 30)
+# IO.inspect PledgeServer.create_pledge("daisy", 40)
+# IO.inspect PledgeServer.create_pledge("grace", 50)
+#
+# IO.inspect PledgeServer.recent_pledges()
+# IO.inspect PledgeServer.total_pledged()

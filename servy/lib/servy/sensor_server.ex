@@ -7,7 +7,7 @@ defmodule Servy.SensorServer do
     # :timer.seconds(60*60)
     # :timer.minutes(60)
     # :timer.hours(1)
-    defstruct sensor_data: %{}, refresh_interval: :timer.minutes(60)
+    defstruct sensor_data: %{}, refresh_interval: :timer.minutes(120)
   end
 
   alias Servy.{Tracker, VideoCam}
@@ -15,7 +15,15 @@ defmodule Servy.SensorServer do
   # Client Interface
 
   def start do
-    GenServer.start(__MODULE__, %State{}, name: @name)
+    IO.puts("Starting the sensor server...")
+    initial_state = %State{}
+    GenServer.start(__MODULE__, initial_state, name: @name)
+  end
+
+  def start_link(interval) do
+    IO.puts("Starting the sensor server with #{interval} min refresh...")
+    initial_state = %State{refresh_interval: interval}
+    GenServer.start_link(__MODULE__, initial_state, name: @name)
   end
 
   def get_sensor_data do

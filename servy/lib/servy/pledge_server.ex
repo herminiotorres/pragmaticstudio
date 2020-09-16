@@ -7,11 +7,57 @@ defmodule Servy.PledgeServer do
     defstruct cache_size: 3, pledges: []
   end
 
+  @doc """
+    Child Specification Fields
+
+    Here's a quick break-down of the fields in the child specification and what they control:
+      - :id
+        A name used internally by the supervisor to uniquely identify the child specification. This key is always required.
+        Default: __MODULE__
+
+      - :start
+        A {module, function, args} tuple used to start a child process. This key is always required.
+        Default: {__MODULE__, :start_link, [[]]}
+
+      - :restart
+        An atom that defines when a terminated child process should be restarted by its supervisor:
+        :permanent indicates that the child process is always restarted
+        :temporary indicates that the child process is never restarted
+        :transient indicates that the child process is restarted only if it terminates abnormally. That is, the exit signal reason must be something other than :normal, :shutdown, or {:shutdown, term}.
+        Default: :permanent
+
+      - :shutdown
+        An atom that defines how a child process should be terminated by its supervisor:
+        :brutal_kill indicates that the child process is brutally terminated using Process.exit(child_pid, :kill)
+        :infinity indicates that the supervisor should wait indefinitely for the child process to terminate
+        any integer indicates the amount of time in milliseconds that the supervisor will wait for a child process to terminate gracefully after sending it a polite Process.exit(child, :shutdown) signal. If no exit signal is received from the child process within the specified time, the child process is brutally terminated using Process.exit(child_pid, :kill). So the supervisor asks nicely once, then it drops the hammer.
+        Default: 5000 if the type is :worker or :infinity if the type is :supervisor.
+
+      - :type
+        An atom that indicates if the child process is a :worker or a :supervisor.
+        Default: :worker
+
+      def child_spec(args) do
+        %{
+          id: Servy.PledgeServer,
+          start: {Servy.PledgeServer, :start_link, [[]]},
+          restart: :permanent,
+          shutdown: 5000,
+          type: :worker
+        }
+      end
+  """
+
   # Client Interface
 
   def start do
     IO.puts("Starting the pledge server...")
     GenServer.start(__MODULE__, %State{}, name: @name)
+  end
+
+  def start_link(_args) do
+    IO.puts("Starting the pledge server...")
+    GenServer.start_link(__MODULE__, %State{}, name: @name)
   end
 
   def create_pledge(name, amount) do

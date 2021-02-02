@@ -3,9 +3,8 @@
   "description": " ",
   "license": "MIT",
   "scripts": {
-    "deploy": "webpack --mode production",
-    "watch": "webpack --mode development --watch",
-    "deploy": "NODE_ENV=production webpack --mode production"
+    "deploy": "NODE_ENV=production webpack --mode production",
+    "watch": "webpack --mode development --watch"
   },
   "dependencies": {
     "phoenix": "file:../deps/phoenix",
@@ -25,8 +24,9 @@
     "node-sass": "^4.13.1",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss": "^8.2.4",
+    "postcss-import": "^14.0.0",
     "postcss-loader": "^4.2.0",
-    "sass-loader": "^8.0.2",
+    "postcss-nested": "^5.0.3",
     "tailwindcss": "^2.0.2",
     "terser-webpack-plugin": "^2.3.2",
     "webpack": "4.41.5",

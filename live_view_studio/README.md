@@ -13,4 +13,15 @@ To start your Phoenix server:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-Adding Tailwind CSS to Phoenix, [look here](https://pragmaticstudio.com/tutorials/adding-tailwind-css-to-phoenix)!
+Adding Tailwind CSS to Phoenix, [look here](https://pragmaticstudio.com/tutorials/adding-tailwind-css-to-phoenix).
+
+### notes
+
+It could be possible to activate the `liveSocket` debug on browser console.
+```javascript
+// enable debug
+liveSocket.enableDebug()
+
+// disable debug
+liveSocket.disableDebug()
+```

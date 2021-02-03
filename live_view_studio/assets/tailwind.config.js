@@ -174,9 +174,10 @@ module.exports = {
   },
   plugins: [],
   purge: [
-    '../lib/**/*.ex',
-    '../lib/**/*.leex',
-    '../lib/**/*.eex',
-    './js/**/*.js'
+    "../**/*.html.eex",
+    "../**/*.html.leex",
+    "../**/views/**/*.ex",
+    "../**/live/**/*.ex",
+    "./js/**/*.js",
   ],
 }

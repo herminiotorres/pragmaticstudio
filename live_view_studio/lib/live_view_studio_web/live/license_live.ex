@@ -18,7 +18,7 @@ defmodule LiveViewStudioWeb.LicenseLive do
             <img src="images/license.svg">
             <span>
               Your license is currently for
-              <strong><%= @seats %></strong> seats.
+              <strong><%= @seats %></strong> <%= Inflex.inflect("seat", @seats) %>.
             </span>
           </div>
           <form phx-change="update">

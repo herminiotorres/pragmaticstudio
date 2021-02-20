@@ -4,16 +4,19 @@ defmodule LiveViewStudioWeb.SalesDashboardLive do
   alias LiveViewStudio.Sales
 
   def mount(_params, _session, socket) do
-    if connected?(socket) do
-      :timer.send_interval(1000, self(), :tick)
-    end
+    socket =
+      socket
+      |> assign_stats()
+      |> assign(refresh: 1)
 
-    socket = assign_stats(socket)
+    if connected?(socket), do: schedule_refresh(socket)
+
     {:ok, socket}
   end
 
   defp assign_stats(socket) do
     assign(socket,
+      last_updated_at: Timex.now(),
       new_orders: Sales.new_orders(),
       sales_amount: Sales.sales_amount(),
       satisfaction: Sales.satisfaction()
@@ -50,10 +53,26 @@ defmodule LiveViewStudioWeb.SalesDashboardLive do
           </span>
         </div>
       </div>
-      <button phx-click="refresh">
-        <img src="images/refresh.svg">
-        Refresh
-      </button>
+      <div class="controls">
+        <p class="mb-4 font-semibold text-indigo-600">
+          Last updated at: <%= Timex.format!(@last_updated_at, "%H:%M:%S", :strftime) %>
+        </p>
+      </div>
+      <div class="controls">
+        <form phx-change="select-refresh">
+          <label for="refresh">
+            Refresh every:
+          </label>
+          <select name="refresh">
+            <%= options_for_select(refresh_options(), @refresh) %>
+          </select>
+        </form>
+
+        <button phx-click="refresh">
+          <img src="images/refresh.svg">
+          Refresh
+        </button>
+      </div>
     </div>
     """
   end
@@ -63,8 +82,23 @@ defmodule LiveViewStudioWeb.SalesDashboardLive do
     {:noreply, socket}
   end
 
+  def handle_event("select-refresh", %{"refresh" => refresh}, socket) do
+    refresh = String.to_integer(refresh)
+    socket = assign(socket, refresh: refresh)
+    {:noreply, socket}
+  end
+
   def handle_info(:tick, socket) do
     socket = assign_stats(socket)
+    schedule_refresh(socket)
     {:noreply, socket}
+  end
+
+  defp schedule_refresh(socket) do
+    Process.send_after(self(), :tick, socket.assigns.refresh * 1000)
+  end
+
+  defp refresh_options do
+    [{"1s", 1}, {"5s", 5}, {"15s", 15}, {"30s", 30}, {"60s", 60}]
   end
 end

@@ -1,5 +1,8 @@
 <section class="phx-hero">
-  <h1><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h1>
+  <h1 class="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-500 mb-2">
+    🔥 Phoenix LiveView Course Demos 🔥
+  </h1>
+  <p><%= gettext "Welcome to %{name}!", name: "Phoenix" %></p>
   <p>Peace of mind from prototype to production</p>
 
   <form phx-change="suggest" phx-submit="search">
@@ -11,6 +14,26 @@
     </datalist>
     <button type="submit" phx-disable-with="Searching...">Go to Hexdocs</button>
   </form>
+</section>
+
+<section class="row">
+  <ul class="examples">
+    <li>
+      <a data-phx-link="redirect" data-phx-link-state="push" href="/light">Button Clicks</a>
+    </li>
+    <li>
+      <a data-phx-link="redirect" data-phx-link-state="push" href="/license">Dynamic Form</a>
+    </li>
+    <li>
+      <a data-phx-link="redirect" data-phx-link-state="push" href="/sales-dashboard">Dashboard</a>
+    </li>
+    <li>
+      <a data-phx-link="redirect" data-phx-link-state="push" href="https://agile-equatorial-stoat.gigalixirapp.com">LiveView Course Demos</a>
+    </li>
+    <li>
+      <a data-phx-link="redirect" data-phx-link-state="push" href="https://github.com/pragmaticstudio/live_view_studio">LiveView Course Github</a>
+    </li>
+  </ul>
 </section>
 
 <section class="row">

@@ -1,5 +1,5 @@
 module.exports = {
-  darkMode: false, // or 'media' or 'class'
+  mode: 'jit',
   theme: {
     fontFamily: {
       sans: [
@@ -174,10 +174,10 @@ module.exports = {
   },
   plugins: [],
   purge: [
-    '../**/*.html.eex',
-    '../**/*.html.leex',
-    '../**/views/**/*.ex',
-    '../**/live/**/*.ex',
-    './js/**/*.js',
+    '../lib/**/*.ex',
+    '../lib/**/*.leex',
+    '../lib/**/*.heex',
+    '../lib/**/*.eex',
+    './js/**/*.js'
   ],
-}
+};

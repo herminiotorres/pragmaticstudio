@@ -1,7 +1,4 @@
-/* This file is for your main application css. */
-
-@import "../node_modules/nprogress/nprogress.css";
-
+/* This file is for your main application CSS */
 @import "tailwindcss/base";
 
 @import "tailwindcss/components";
@@ -13,3 +10,4 @@
 @import "./live_view.css";
 
 @import "tailwindcss/utilities";
+

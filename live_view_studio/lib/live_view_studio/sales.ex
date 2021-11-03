@@ -4,7 +4,7 @@ defmodule LiveViewStudio.Sales do
   end
 
   def sales_amount do
-    Enum.random(100..1_000)
+    Enum.random(100..1000)
   end
 
   def satisfaction do

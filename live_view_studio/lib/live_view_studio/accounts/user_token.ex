@@ -42,7 +42,9 @@ defmodule LiveViewStudio.Accounts.UserToken do
   """
   def build_session_token(user) do
     token = :crypto.strong_rand_bytes(@rand_size)
-    {token, %LiveViewStudio.Accounts.UserToken{token: token, context: "session", user_id: user.id}}
+
+    {token,
+     %LiveViewStudio.Accounts.UserToken{token: token, context: "session", user_id: user.id}}
   end
 
   @doc """
@@ -173,6 +175,7 @@ defmodule LiveViewStudio.Accounts.UserToken do
   end
 
   def user_and_contexts_query(user, [_ | _] = contexts) do
-    from t in LiveViewStudio.Accounts.UserToken, where: t.user_id == ^user.id and t.context in ^contexts
+    from t in LiveViewStudio.Accounts.UserToken,
+      where: t.user_id == ^user.id and t.context in ^contexts
   end
 end

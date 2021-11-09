@@ -8,19 +8,6 @@ defmodule LiveViewStudio.Boats do
 
   alias LiveViewStudio.Boats.Boat
 
-  @doc """
-  Returns the list of boats.
-
-  ## Examples
-
-      iex> list_boats()
-      [%Boat{}, ...]
-
-  """
-  def list_boats do
-    Repo.all(Boat)
-  end
-
   # [type: "sporting", prices: ["$", "$$"]]
 
   def list_boats(criteria) when is_list(criteria) do
@@ -40,6 +27,19 @@ defmodule LiveViewStudio.Boats do
         from q in query, where: q.price in ^prices
     end)
     |> Repo.all()
+  end
+
+  @doc """
+  Returns the list of boats.
+
+  ## Examples
+
+      iex> list_boats()
+      [%Boat{}, ...]
+
+  """
+  def list_boats do
+    Repo.all(Boat)
   end
 
   @doc """

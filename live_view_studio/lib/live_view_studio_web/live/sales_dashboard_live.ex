@@ -24,7 +24,7 @@ defmodule LiveViewStudioWeb.SalesDashboardLive do
   end
 
   def render(assigns) do
-    ~L"""
+    ~H"""
     <h1>Sales Dashboard</h1>
     <div id="dashboard">
       <div class="stats">

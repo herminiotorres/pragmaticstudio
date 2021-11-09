@@ -43,23 +43,15 @@ defmodule LiveViewStudioWeb.LightLive do
       <p>
         <form phx-change="update">
           <input type="range" min="0" max="100"
-                 name="brightness" value={"#{@brightness}"} />
+                 name="brightness" value={@brightness} />
         </form>
       </p>
 
       <p>
         <form phx-change="change-temp">
-          <input type="radio" id="3000" name="temp" value="3000"
-             />
-          <label for="3000">3000</label>
-
-          <input type="radio" id="4000" name="temp" value="4000"
-            />
-          <label for="4000">4000</label>
-
-          <input type="radio" id="5000" name="temp" value="5000"
-             />
-          <label for="5000">5000</label>
+          <%= for temp <- [3000, 4000, 5000]  do %>
+            <%= temp_radio_button(temp, temp == @temp) %>
+          <% end %>
         </form>
       </p>
     </div>
@@ -109,7 +101,21 @@ defmodule LiveViewStudioWeb.LightLive do
   defp temp_color(4000), do: "#FEFF66"
   defp temp_color(5000), do: "#99CCFF"
 
-  defp checked(3000), do: "checked"
-  defp checked(4000), do: "checked"
-  defp checked(5000), do: "checked"
+  defp temp_radio_button(temp, true) do
+    assigns = %{temp: temp}
+
+    ~H"""
+    <input type="radio" id={"#{@temp}"} name="temp" value={"#{@temp}"} checked />
+    <label for={"#{@temp}"}><%= @temp %></label>
+    """
+  end
+
+  defp temp_radio_button(temp, _checked) do
+    assigns = %{temp: temp}
+
+    ~H"""
+    <input type="radio" id={"#{@temp}"} name="temp" value={"#{@temp}"} />
+    <label for={"#{@temp}"}><%= @temp %></label>
+    """
+  end
 end

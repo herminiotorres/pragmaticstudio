@@ -15,14 +15,14 @@ defmodule LiveViewStudioWeb.SearchLive do
   end
 
   def render(assigns) do
-    ~L"""
+    ~H"""
     <h1>Find a Store</h1>
     <div id="search">
       <form phx-submit="zip-search">
-        <input type="text" name="zip" value="<%= @zip %>"
-               placeholder="Zip Code"
-               autofocus autocomplete="off"
-               <%= if @loading, do: "readonly" %> />
+        <input type="text" name="zip" value={"#{@zip}"}
+          placeholder="Zip Code"
+          autofocus autocomplete="off"
+          readonly={@loading} />
 
         <button type="submit">
           <img src="images/search.svg">
@@ -70,7 +70,7 @@ defmodule LiveViewStudioWeb.SearchLive do
   end
 
   def handle_event("zip-search", %{"zip" => zip}, socket) do
-    send(self(), {:run_zip_search, zip})
+    Process.send_after(self(), {:run_zip_search, zip}, 500)
 
     socket =
       assign(socket,

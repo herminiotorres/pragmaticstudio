@@ -13,18 +13,27 @@
 
 <ul class="examples">
   <li>
-    <a data-phx-link="redirect" data-phx-link-state="push" href="/light">Button Clicks</a>
+    <%= live_redirect "Button Clicks", to: Routes.live_path(@socket, LiveViewStudioWeb.LightLive) %>
   </li>
   <li>
-    <a data-phx-link="redirect" data-phx-link-state="push" href="/license">Dynamic Form</a>
+    <%= live_redirect "Dynamic Form", to: Routes.live_path(@socket, LiveViewStudioWeb.LicenseLive) %>
   </li>
   <li>
-    <a data-phx-link="redirect" data-phx-link-state="push" href="/sales-dashboard">Dashboard</a>
+    <%= live_redirect "Dashboard", to: Routes.live_path(@socket, LiveViewStudioWeb.SalesDashboardLive) %>
   </li>
   <li>
-    <a data-phx-link="redirect" data-phx-link-state="push" href="/search">Live Search</a>
+    <%= live_redirect "Live Search", to: Routes.live_path(@socket, LiveViewStudioWeb.SearchLive) %>
   </li>
   <li>
-    <a data-phx-link="redirect" data-phx-link-state="push" href="/flights">Flight Search</a>
+    <%= live_redirect "Autocomplete", to: Routes.live_path(@socket, LiveViewStudioWeb.AutocompleteLive) %>
+  </li>
+  <li>
+    <%= live_redirect "Flight Search", to: Routes.live_path(@socket, LiveViewStudioWeb.FlightsLiveLive) %>
+  </li>
+  <li>
+    <%= live_redirect "Filtering", to: Routes.live_path(@socket, LiveViewStudioWeb.FilterLive) %>
+  </li>
+  <li>
+    <%= live_redirect "Git Repositories", to: Routes.live_path(@socket, LiveViewStudioWeb.GitReposLive) %>
   </li>
 </ul>

@@ -5,7 +5,7 @@ defmodule LiveViewStudioWeb.FilterLive do
 
   def mount(_params, _session, socket) do
     socket = assign_defaults(socket)
-    socket = {:ok, socket, temporary_assigns: [boats: []]}
+    {:ok, socket, temporary_assigns: [boats: []]}
   end
 
   def render(assigns) do
@@ -30,7 +30,7 @@ defmodule LiveViewStudioWeb.FilterLive do
         <div class="boats">
           <%= for boat <- @boats do %>
             <div class="card">
-              <img src={"#{boat.image}"}>
+              <img src={boat.image}>
               <div class="content">
                 <div class="model">
                   <%= boat.model %>
@@ -68,9 +68,9 @@ defmodule LiveViewStudioWeb.FilterLive do
 
     ~H"""
     <input type="checkbox" id={"#{@price}"}
-          name="prices[]" value={"#{@price}"}
+          name="prices[]" value={@price}
           checked />
-    <label for={"#{@price}"}><%= @price %></label>
+    <label for={@price}><%= @price %></label>
     """
   end
 
@@ -79,8 +79,8 @@ defmodule LiveViewStudioWeb.FilterLive do
 
     ~H"""
     <input type="checkbox" id={"#{@price}"}
-          name="prices[]" value={"#{@price}"} />
-    <label for={"#{@price}"}><%= @price %></label>
+          name="prices[]" value={@price} />
+    <label for={@price}><%= @price %></label>
     """
   end
 

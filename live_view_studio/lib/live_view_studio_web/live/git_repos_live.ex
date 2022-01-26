@@ -5,7 +5,7 @@ defmodule LiveViewStudioWeb.GitReposLive do
 
   def mount(_params, _session, socket) do
     socket = assign_defaults(socket)
-    {:ok, socket}
+    {:ok, socket, temporary_assigns: [repos: []]}
   end
 
   def render(assigns) do
@@ -30,11 +30,11 @@ defmodule LiveViewStudioWeb.GitReposLive do
             <div class="first-line">
               <div class="group">
                 <img src="images/terminal.svg">
-                <a href={"#{repo.owner_url}"}>
+                <a href={repo.owner_url}>
                   <%= repo.owner_login %>
                 </a>
                 /
-                <a href={"#{repo.url}"}>
+                <a href={repo.url}>
                   <%= repo.name %>
                 </a>
               </div>

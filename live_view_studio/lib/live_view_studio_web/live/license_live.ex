@@ -43,8 +43,12 @@ defmodule LiveViewStudioWeb.LicenseLive do
             </span>
           </div>
           <form phx-change="update">
-            <input type="range" min="1" max="10"
-                  name="seats" value={@seats} />
+            <input type="range"
+                  min="1"
+                  max="10"
+                  name="seats"
+                  phx-debounce="250"
+                  value={@seats} />
           </form>
           <div class="amount">
             <%= number_to_currency(@amount) %>

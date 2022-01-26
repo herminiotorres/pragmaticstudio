@@ -13,7 +13,7 @@ defmodule LiveViewStudioWeb.AutocompleteLive do
         loading: false
       )
 
-    {:ok, socket}
+    {:ok, socket, temporary_assigns: [stores: [], matches: []]}
   end
 
   def render(assigns) do
@@ -22,7 +22,7 @@ defmodule LiveViewStudioWeb.AutocompleteLive do
     <div id="search">
 
       <form phx-submit="zip-search">
-        <input type="text" name="zip" value={"#{@zip}"}
+        <input type="text" name="zip" value={@zip}
                placeholder="Zip Code"
                autofocus autocomplete="off"
                readonly={@loading} />
@@ -33,7 +33,7 @@ defmodule LiveViewStudioWeb.AutocompleteLive do
       </form>
 
       <form phx-submit="city-search" phx-change="suggest-city">
-        <input type="text" name="city" value={"#{@city}"}
+        <input type="text" name="city" value={@city}
                placeholder="City"
                autocomplete="off"
                list="matches"
@@ -47,7 +47,7 @@ defmodule LiveViewStudioWeb.AutocompleteLive do
 
       <datalist id="matches">
         <%= for match <- @matches do %>
-          <option value={"#{match}"}><%= match %></option>
+          <option value={match}><%= match %></option>
         <% end %>
       </datalist>
 
@@ -105,22 +105,6 @@ defmodule LiveViewStudioWeb.AutocompleteLive do
     {:noreply, socket}
   end
 
-  def handle_info({:zip_search, zip}, socket) do
-    socket =
-      case Stores.search_by_zip(zip) do
-        [] ->
-          socket
-          |> put_flash(:info, ~s(No stores matching "#{zip}"))
-          |> assign(stores: [], loading: false)
-
-        stores ->
-          socket
-          |> assign(stores: stores, loading: false)
-      end
-
-    {:noreply, socket}
-  end
-
   def handle_event("suggest-city", %{"city" => prefix}, socket) do
     socket = assign(socket, matches: Cities.suggest(prefix))
     {:noreply, socket}
@@ -135,6 +119,22 @@ defmodule LiveViewStudioWeb.AutocompleteLive do
         stores: [],
         loading: true
       )
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:zip_search, zip}, socket) do
+    socket =
+      case Stores.search_by_zip(zip) do
+        [] ->
+          socket
+          |> put_flash(:info, ~s(No stores matching "#{zip}"))
+          |> assign(stores: [], loading: false)
+
+        stores ->
+          socket
+          |> assign(stores: stores, loading: false)
+      end
 
     {:noreply, socket}
   end

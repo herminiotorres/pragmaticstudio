@@ -19,6 +19,15 @@ defmodule LiveViewStudio.GitRepos.GitRepo do
   def changeset(git_repo, attrs) do
     git_repo
     |> cast(attrs, [:name, :url, :owner_login, :owner_url, :language, :license, :fork, :stars])
-    |> validate_required([:name, :url, :owner_login, :owner_url, :language, :license, :fork, :stars])
+    |> validate_required([
+      :name,
+      :url,
+      :owner_login,
+      :owner_url,
+      :language,
+      :license,
+      :fork,
+      :stars
+    ])
   end
 end

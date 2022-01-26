@@ -105,8 +105,8 @@ defmodule LiveViewStudioWeb.LightLive do
     assigns = %{temp: temp}
 
     ~H"""
-    <input type="radio" id={"#{@temp}"} name="temp" value={"#{@temp}"} checked />
-    <label for={"#{@temp}"}><%= @temp %></label>
+    <input type="radio" id={"#{@temp}"} name="temp" value={@temp} checked />
+    <label for={@temp}><%= @temp %></label>
     """
   end
 
@@ -114,8 +114,8 @@ defmodule LiveViewStudioWeb.LightLive do
     assigns = %{temp: temp}
 
     ~H"""
-    <input type="radio" id={"#{@temp}"} name="temp" value={"#{@temp}"} />
-    <label for={"#{@temp}"}><%= @temp %></label>
+    <input type="radio" id={"#{@temp}"} name="temp" value={@temp} />
+    <label for={@temp}><%= @temp %></label>
     """
   end
 end

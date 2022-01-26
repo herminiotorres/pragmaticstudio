@@ -8,7 +8,16 @@ defmodule LiveViewStudio.GitReposTest do
 
     import LiveViewStudio.GitReposFixtures
 
-    @invalid_attrs %{fork: nil, language: nil, license: nil, name: nil, owner_login: nil, owner_url: nil, stars: nil, url: nil}
+    @invalid_attrs %{
+      fork: nil,
+      language: nil,
+      license: nil,
+      name: nil,
+      owner_login: nil,
+      owner_url: nil,
+      stars: nil,
+      url: nil
+    }
 
     test "list_git_repos/0 returns all git_repos" do
       git_repo = git_repo_fixture()
@@ -21,7 +30,16 @@ defmodule LiveViewStudio.GitReposTest do
     end
 
     test "create_git_repo/1 with valid data creates a git_repo" do
-      valid_attrs = %{fork: true, language: "some language", license: "some license", name: "some name", owner_login: "some owner_login", owner_url: "some owner_url", stars: 42, url: "some url"}
+      valid_attrs = %{
+        fork: true,
+        language: "some language",
+        license: "some license",
+        name: "some name",
+        owner_login: "some owner_login",
+        owner_url: "some owner_url",
+        stars: 42,
+        url: "some url"
+      }
 
       assert {:ok, %GitRepo{} = git_repo} = GitRepos.create_git_repo(valid_attrs)
       assert git_repo.fork == true
@@ -40,7 +58,17 @@ defmodule LiveViewStudio.GitReposTest do
 
     test "update_git_repo/2 with valid data updates the git_repo" do
       git_repo = git_repo_fixture()
-      update_attrs = %{fork: false, language: "some updated language", license: "some updated license", name: "some updated name", owner_login: "some updated owner_login", owner_url: "some updated owner_url", stars: 43, url: "some updated url"}
+
+      update_attrs = %{
+        fork: false,
+        language: "some updated language",
+        license: "some updated license",
+        name: "some updated name",
+        owner_login: "some updated owner_login",
+        owner_url: "some updated owner_url",
+        stars: 43,
+        url: "some updated url"
+      }
 
       assert {:ok, %GitRepo{} = git_repo} = GitRepos.update_git_repo(git_repo, update_attrs)
       assert git_repo.fork == false

@@ -11,7 +11,7 @@ defmodule LiveViewStudioWeb.SearchLive do
         loading: false
       )
 
-    {:ok, socket}
+    {:ok, socket, temporary_assigns: [stores: []]}
   end
 
   def render(assigns) do
@@ -19,7 +19,7 @@ defmodule LiveViewStudioWeb.SearchLive do
     <h1>Find a Store</h1>
     <div id="search">
       <form phx-submit="zip-search">
-        <input type="text" name="zip" value={"#{@zip}"}
+        <input type="text" name="zip" value={@zip}
           placeholder="Zip Code"
           autofocus autocomplete="off"
           readonly={@loading} />

@@ -8,7 +8,15 @@ defmodule LiveViewStudio.StoresTest do
 
     import LiveViewStudio.StoresFixtures
 
-    @invalid_attrs %{city: nil, hours: nil, name: nil, open: nil, phone_number: nil, street: nil, zip: nil}
+    @invalid_attrs %{
+      city: nil,
+      hours: nil,
+      name: nil,
+      open: nil,
+      phone_number: nil,
+      street: nil,
+      zip: nil
+    }
 
     test "list_stores/0 returns all stores" do
       store = store_fixture()
@@ -21,7 +29,15 @@ defmodule LiveViewStudio.StoresTest do
     end
 
     test "create_store/1 with valid data creates a store" do
-      valid_attrs = %{city: "some city", hours: "some hours", name: "some name", open: true, phone_number: "some phone_number", street: "some street", zip: "some zip"}
+      valid_attrs = %{
+        city: "some city",
+        hours: "some hours",
+        name: "some name",
+        open: true,
+        phone_number: "some phone_number",
+        street: "some street",
+        zip: "some zip"
+      }
 
       assert {:ok, %Store{} = store} = Stores.create_store(valid_attrs)
       assert store.city == "some city"
@@ -39,7 +55,16 @@ defmodule LiveViewStudio.StoresTest do
 
     test "update_store/2 with valid data updates the store" do
       store = store_fixture()
-      update_attrs = %{city: "some updated city", hours: "some updated hours", name: "some updated name", open: false, phone_number: "some updated phone_number", street: "some updated street", zip: "some updated zip"}
+
+      update_attrs = %{
+        city: "some updated city",
+        hours: "some updated hours",
+        name: "some updated name",
+        open: false,
+        phone_number: "some updated phone_number",
+        street: "some updated street",
+        zip: "some updated zip"
+      }
 
       assert {:ok, %Store{} = store} = Stores.update_store(store, update_attrs)
       assert store.city == "some updated city"

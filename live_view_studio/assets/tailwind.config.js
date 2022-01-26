@@ -1,5 +1,4 @@
 module.exports = {
-  mode: 'jit',
   theme: {
     fontFamily: {
       sans: [
@@ -173,11 +172,16 @@ module.exports = {
     //backgroundColor: ["responsive", "hover", "focus", "active"]
   },
   plugins: [],
-  purge: [
+  content: [
     '../lib/**/*.ex',
     '../lib/**/*.leex',
     '../lib/**/*.heex',
     '../lib/**/*.eex',
     './js/**/*.js'
   ],
+  // darkMode: 'media' or 'class'
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography')
+  ]
 };

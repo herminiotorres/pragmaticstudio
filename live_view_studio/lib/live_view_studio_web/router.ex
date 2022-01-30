@@ -30,6 +30,7 @@ defmodule LiveViewStudioWeb.Router do
     live "/filter", FilterLive
     live "/git-repos", GitReposLive
     live "/servers", ServersLive
+    live "/paginate", PaginateLive
   end
 
   # Other scopes may use custom stacks.

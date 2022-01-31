@@ -35,7 +35,12 @@ defmodule LiveViewStudio.VehiclesTest do
 
     test "update_vehicle/2 with valid data updates the vehicle" do
       vehicle = vehicle_fixture()
-      update_attrs = %{color: "some updated color", make: "some updated make", model: "some updated model"}
+
+      update_attrs = %{
+        color: "some updated color",
+        make: "some updated make",
+        model: "some updated model"
+      }
 
       assert {:ok, %Vehicle{} = vehicle} = Vehicles.update_vehicle(vehicle, update_attrs)
       assert vehicle.color == "some updated color"

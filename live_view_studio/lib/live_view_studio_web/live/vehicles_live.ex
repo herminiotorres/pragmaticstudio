@@ -1,30 +1,30 @@
-defmodule LiveViewStudioWeb.PaginateLive do
+defmodule LiveViewStudioWeb.VehiclesLive do
   use LiveViewStudioWeb, :live_view
 
-  alias LiveViewStudio.Donations
+  alias LiveViewStudio.Vehicles
 
   @impl true
   def mount(_params, _session, socket) do
     socket =
       assign(socket,
-        total_donations: Donations.count_donations()
+        total_vehicles: Vehicles.count_vehicles()
       )
 
-    {:ok, socket, temporary_assigns: [donations: []]}
+    {:ok, socket, temporary_assigns: [vehicles: []]}
   end
 
   @impl true
   def handle_params(params, _url, socket) do
     page = String.to_integer(params["page"] || "1")
-    per_page = String.to_integer(params["per_page"] || "5")
+    per_page = String.to_integer(params["per_page"] || "10")
 
     paginate_options = %{page: page, per_page: per_page}
-    donations = Donations.list_donations(paginate: paginate_options)
+    vehicles = Vehicles.list_vehicles(paginate: paginate_options)
 
     socket =
       assign(socket,
         options: paginate_options,
-        donations: donations
+        vehicles: vehicles
       )
 
     {:noreply, socket}
@@ -55,9 +55,5 @@ defmodule LiveViewStudioWeb.PaginateLive do
       ),
       class: class
     )
-  end
-
-  defp expires_class(donation) do
-    if Donations.almost_expired?(donation), do: "eat-now", else: "fresh"
   end
 end
